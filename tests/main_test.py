@@ -22,7 +22,7 @@ extract_using_fallback_to_snapshot_no_cache = tldextract.TLDExtract(
 # pylint: enable=invalid-name
 
 
-def assert_extract(
+def assert_extract(  # pylint: disable=missing-docstring
         url,
         expected_domain_data,
         expected_ip_data='',
@@ -71,6 +71,11 @@ def test_odd_but_possible():
     assert_extract('http://www.com', ('www.com', '', 'www', 'com'))
 
 
+def test_suffix():
+    assert_extract('com', ('', '', '', 'com'))
+    assert_extract('co.uk', ('', '', '', 'co.uk'))
+
+
 def test_local_host():
     assert_extract('http://internalunlikelyhostname/',
                    ('', '', 'internalunlikelyhostname', ''))
@@ -102,6 +107,10 @@ def test_looks_like_ip():
 def test_punycode():
     assert_extract('http://xn--h1alffa9f.xn--p1ai',
                    ('xn--h1alffa9f.xn--p1ai', '', 'xn--h1alffa9f', 'xn--p1ai'))
+    assert_extract('http://xN--h1alffa9f.xn--p1ai',
+                   ('xN--h1alffa9f.xn--p1ai', '', 'xN--h1alffa9f', 'xn--p1ai'))
+    assert_extract('http://XN--h1alffa9f.xn--p1ai',
+                   ('XN--h1alffa9f.xn--p1ai', '', 'XN--h1alffa9f', 'xn--p1ai'))
     # Entries that might generate UnicodeError exception
     # This subdomain generates UnicodeError 'IDNA does not round-trip'
     assert_extract('xn--tub-1m9d15sfkkhsifsbqygyujjrw602gk4li5qqk98aca0w.google.com',

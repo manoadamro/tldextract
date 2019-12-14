@@ -2,6 +2,7 @@
 
 
 import logging
+import sys
 
 try:
     import pkg_resources
@@ -48,9 +49,10 @@ def main():
 
     if args.update:
         tld_extract.update(True)
-    elif len(args.input) is 0:
+    elif not args.input:
         parser.print_usage()
-        exit(1)
+        sys.exit(1)
+        return
 
     for i in args.input:
         print(' '.join(tld_extract(i)))  # pylint: disable=superfluous-parens

@@ -25,22 +25,19 @@ By default, this package supports the public ICANN TLDs and their exceptions.
 You can optionally support the Public Suffix List's private domains as well.
 """
 
-import re
 import sys
 from setuptools import setup
 
-# I don't want to learn reStructuredText right now, so strip Markdown links
-# that make pip barf.
-LONG_DESCRIPTION_MD = __doc__
-LONG_DESCRIPTION = re.sub(r'(?s)\[(.*?)\]\((http.*?)\)', r'\1', LONG_DESCRIPTION_MD)
+if sys.version_info < (2, 7):
+    raise RuntimeError("Python 2.6 is EOL and no longer supported. "
+                       "Please upgrade your Python or use an older "
+                       "version of tldextract.")
 
 INSTALL_REQUIRES = ["setuptools", "idna", "requests>=2.1.0", "requests-file>=1.4"]
-if (2, 7) > sys.version_info:
-    INSTALL_REQUIRES.append("argparse>=1.2.1")
 
 setup(
     name="tldextract",
-    version="2.2.0",
+    version="2.2.2",
     author="John Kurkowski",
     author_email="john.kurkowski@gmail.com",
     description=("Accurately separate the TLD from the registered domain and "
@@ -53,18 +50,20 @@ setup(
     url="https://github.com/john-kurkowski/tldextract",
     packages=['tldextract'],
     include_package_data=True,
-    long_description=LONG_DESCRIPTION,
+    python_requires='>=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*',
+    long_description=__doc__,
+    long_description_content_type="text/markdown",
     classifiers=[
         "Development Status :: 5 - Production/Stable",
         "Topic :: Utilities",
         "License :: OSI Approved :: BSD License",
         "Programming Language :: Python :: 2",
-        "Programming Language :: Python :: 2.6",
         "Programming Language :: Python :: 2.7",
         "Programming Language :: Python :: 3",
-        "Programming Language :: Python :: 3.4",
         "Programming Language :: Python :: 3.5",
         "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
     ],
     entry_points={
         'console_scripts': [
